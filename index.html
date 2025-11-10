@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Previsão do Tempo ☀️</title>
     <link rel="stylesheet" href="assets/CSS/styles.css">
 </head>
+
 <body>
     <div class="container">
-        <h1>Previsão do Tempo</h1> <form id="weather-form">
-            <input 
-                type="text" 
-                id="city-input" 
-                placeholder="Digite o nome da cidade" 
-                required
-            >
+        <h1>Previsão do Tempo</h1>
+        <form id="weather-form">
+            <input type="text" id="city-input" placeholder="Digite o nome da cidade" required>
             <button type="submit">Buscar</button>
         </form>
+        <div id="error-message-box" class="error-message">
+        </div>
 
         <div id="weather-result" class="result-box">
             <p>Aguardando busca...</p>
@@ -25,4 +25,5 @@
 
     <script src="assets/JS/api.js"></script>
 </body>
+
 </html>

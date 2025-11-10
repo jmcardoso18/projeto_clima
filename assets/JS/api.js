@@ -2,72 +2,82 @@
 const weatherForm = document.getElementById('weather-form');
 const cityInput = document.getElementById('city-input');
 const weatherResult = document.getElementById('weather-result');
+const container = document.querySelector('.container'); // Seletor para o container principal
+// NOVO: Adiciona a constante para a caixa de erro (DEVE existir no index.html)
+const errorMessageBox = document.getElementById('error-message-box'); 
 
-// Função para exibir o resultado no Frontend
+// Função auxiliar para exibir a mensagem de erro do formulário
+function displayFormError(message) {
+    if (errorMessageBox) {
+        errorMessageBox.textContent = message;
+        errorMessageBox.style.display = 'block';
+    }
+}
+
+// Função auxiliar para limpar a mensagem de erro do formulário
+function clearFormError() {
+    if (errorMessageBox) {
+        errorMessageBox.textContent = '';
+        errorMessageBox.style.display = 'none';
+    }
+}
+
+// Função para reverter para o estado inicial (formulário de busca)
+function resetApp() {
+    weatherForm.style.display = 'flex'; // Mostra o formulário
+    weatherResult.classList.remove('visible'); // Esconde o card de resultado
+    cityInput.value = ''; // Limpa o input
+    container.classList.remove('result-view'); // Remove classe de visualização de resultado
+    clearFormError(); // Limpa o erro ao resetar
+}
+
+// Event Listener para o ícone de casa (retorna à busca)
+// Usamos delegação de eventos para o elemento gerado dinamicamente
+weatherResult.addEventListener('click', function(event) {
+    // Verifica se o clique foi no elemento com a classe 'home-icon' ou em seus descendentes
+    if (event.target.closest('.home-icon')) {
+        resetApp();
+    }
+});
+
+// Função para exibir o resultado no Frontend (MODIFICADA para o layout minimalista)
 function displayWeather(cityName, data) {
-    weatherResult.classList.remove('visible'); // Esconde o resultado anterior
+    clearFormError(); // Limpa qualquer erro anterior antes de mostrar o resultado
+
+    // 1. Oculta o Formulário e prepara o Container
+    weatherForm.style.display = 'none';
+    container.classList.add('result-view'); // Adiciona classe para possíveis ajustes de layout
+
+    weatherResult.classList.remove('visible');
+    
     if (!data || !data.current_weather) {
-        weatherResult.innerHTML = `<p class="error">Dados do clima não disponíveis para ${cityName}.</p>`;
-        weatherResult.classList.add('visible'); // Torna visível para mostrar o erro
+        // Em caso de erro DENTRO dos dados do clima (após encontrar a cidade)
+        weatherResult.innerHTML = `<p class="error">Dados do clima não disponíveis para ${cityName}. <a href="#" onclick="resetApp()">Tentar novamente</a></p>`;
+        weatherResult.classList.add('visible'); 
         return;
     }
 
-    const { temperature, windspeed, winddirection, time } = data.current_weather;
-    const weatherCode = data.current_weather.weathercode;
+    // Apenas a temperatura é necessária para este layout
+    const { temperature } = data.current_weather; 
 
-    let weatherDescription = 'Condição Desconhecida';
-    if (weatherCode === 0) weatherDescription = 'Céu Limpo ☀️';
-    else if (weatherCode >= 1 && weatherCode <= 3) weatherDescription = 'Parcialmente Nublado 🌥️';
-    else if (weatherCode >= 51 && weatherCode <= 67) weatherDescription = 'Chuva 🌧️';
-    else if (weatherCode >= 71 && weatherCode <= 75) weatherDescription = 'Neve ❄️';
-
+    // 2. Gera o novo HTML minimalista (com base no layout solicitado)
     weatherResult.innerHTML = `
-        <h2>Clima Atual em ${cityName}</h2>
-        <p><strong>Temperatura:</strong> ${temperature} °C</p>
-        <p><strong>Condição:</strong> ${weatherDescription}</p>
-        <p><strong>Velocidade do Vento:</strong> ${windspeed} km/h</p>
-        <p><strong>Direção do Vento:</strong> ${winddirection}°</p>
-        <p class="small-text">Atualizado em: ${new Date(time).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</p>
+        <div class="temp-box">
+            ${Math.round(temperature)}° 
+        </div>
+        <div class="city-name">
+            ${cityName}
+        </div>
+        <div class="home-icon" title="Nova busca">
+            &#8962; 
+        </div>
     `;
-    weatherResult.classList.add('visible'); // Torna o resultado visível
+    
+    // 3. Torna o resultado visível
+    weatherResult.classList.add('visible');
 }
 
-// ... (código existente) ...
-
-async function getWeatherData(cityName) {
-    weatherResult.classList.remove('visible'); // Esconde o resultado enquanto busca
-    weatherResult.innerHTML = `<p>Buscando clima para **${cityName}**...</p>`;
-    weatherResult.classList.add('visible'); // Mostra a mensagem de "Buscando..."
-
-    const coords = await getCoordinates(cityName);
-
-    if (!coords) {
-        weatherResult.innerHTML = `<p class="error">⚠️ Cidade **${cityName}** não encontrada. Por favor, verifique a escrita.</p>`;
-        weatherResult.classList.add('visible'); // Mostra a mensagem de erro
-        return;
-    }
-
-    const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&current_weather=true&temperature_unit=celsius&wind_speed_unit=kmh&timezone=auto`;
-
-    try {
-        const response = await fetch(weatherApiUrl);
-
-        if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        
-        displayWeather(cityName, data);
-
-    } catch (error) {
-        console.error('Erro ao buscar dados do clima:', error);
-        weatherResult.innerHTML = `<p class="error">❌ Ocorreu um erro ao obter os dados do clima. Tente novamente mais tarde.</p>`;
-        weatherResult.classList.add('visible'); // Mostra a mensagem de erro
-    }
-}
-
-// Função para buscar coordenadas da cidade
+// Função para buscar coordenadas da cidade (Permanece inalterada)
 async function getCoordinates(cityName) {
     const geoApiUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1&language=pt&format=json`;
 
@@ -81,9 +91,11 @@ async function getCoordinates(cityName) {
         // Verifica se algum resultado foi encontrado
         if (data.results && data.results.length > 0) {
             const result = data.results[0];
+            const fullName = `${result.name}, ${result.country}`; 
             return {
                 latitude: result.latitude,
-                longitude: result.longitude
+                longitude: result.longitude,
+                fullName: fullName 
             };
         } else {
             return null; // Cidade não encontrada
@@ -94,50 +106,66 @@ async function getCoordinates(cityName) {
     }
 }
 
-// Função principal para buscar os dados do clima
+// Função principal para buscar os dados do clima (CORRIGIDA)
 async function getWeatherData(cityName) {
+    clearFormError(); // Limpa qualquer mensagem de erro antes de iniciar a busca
+    
+    // Mostra o feedback de busca no weatherResult (opcional, mas bom feedback)
+    weatherResult.classList.remove('visible'); 
     weatherResult.innerHTML = `<p>Buscando clima para **${cityName}**...</p>`;
+    weatherResult.classList.add('visible'); 
+    
+    weatherForm.style.display = 'none'; // Oculta o formulário APENAS durante a busca
 
-    // 1. Obter Latitude e Longitude
     const coords = await getCoordinates(cityName);
 
     if (!coords) {
-        weatherResult.innerHTML = `<p class="error">⚠️ Cidade **${cityName}** não encontrada. Por favor, verifique a escrita.</p>`;
+        // CASO DE ERRO 1: Cidade não encontrada.
+        weatherResult.classList.remove('visible'); // Oculta a mensagem de "Buscando..."
+        weatherForm.style.display = 'flex'; // Re-exibe o formulário
+        
+        // Exibe o erro estilizado, conforme a imagem
+        displayFormError(`Cidade não encontrada. Tente novamente.`);
+        
         return;
     }
 
-    // 2. Montar a URL da API do Clima
+    // ... (restante da lógica de busca do clima)
     const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&current_weather=true&temperature_unit=celsius&wind_speed_unit=kmh&timezone=auto`;
 
     try {
-        // 3. Fazer a requisição HTTP (GET)
         const response = await fetch(weatherApiUrl);
 
         if (!response.ok) {
-            // Lança um erro se a resposta HTTP não for bem-sucedida (status 4xx ou 5xx)
             throw new Error(`Erro HTTP: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();
         
-        // 4. Tratar e Exibir os dados
-        displayWeather(cityName, data);
+        displayWeather(coords.fullName, data);
 
     } catch (error) {
+        // CASO DE ERRO 2: Erro de API/rede
         console.error('Erro ao buscar dados do clima:', error);
-        weatherResult.innerHTML = `<p class="error">❌ Ocorreu um erro ao obter os dados do clima. Tente novamente mais tarde.</p>`;
+        weatherResult.innerHTML = `<p class="error">❌ Ocorreu um erro ao obter os dados do clima. <a href="#" onclick="resetApp()">Tentar novamente</a></p>`;
+        weatherResult.classList.add('visible');
+        weatherForm.style.display = 'none'; // Mantém o formulário oculto
     }
 }
 
 
-// Event Listener para o formulário
+// Event Listener para o formulário (MODIFICADO para usar clearFormError)
 weatherForm.addEventListener('submit', function(event) {
-    event.preventDefault(); // Impede o recarregamento da página
-    const cityName = cityInput.value.trim(); // Pega o valor e remove espaços
+    event.preventDefault(); 
+    const cityName = cityInput.value.trim(); 
+    
+    clearFormError(); // Limpa o erro antes de iniciar a busca
     
     if (cityName) {
         getWeatherData(cityName);
     } else {
-        weatherResult.innerHTML = `<p class="error">Por favor, digite o nome de uma cidade.</p>`;
+        // Se o campo estiver vazio
+        displayFormError(`Por favor, digite o nome de uma cidade.`);
+        // O formulário permanece visível
     }
 });
