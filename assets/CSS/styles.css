@@ -1,0 +1,138 @@
+/* Configurações básicas e reset */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #87CEEB, #ADD8E6); /* Gradiente de azul claro */
+    color: #333;
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;   /* Centraliza verticalmente */
+    min-height: 100vh;     /* Garante que o body ocupe a altura total da viewport */
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px; /* Bordas mais arredondadas */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+    width: 100%;
+    max-width: 400px; /* Largura um pouco menor */
+    text-align: center;
+}
+
+/* Título */
+h1 {
+    color: #333; /* Cor mais escura para o título */
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    display: none; /* Oculta o título principal "Previsão do Tempo" para se adequar ao layout da imagem */
+}
+
+/* Formulário e Título do Card */
+.container h1:first-of-type { /* Seleciona o primeiro h1 dentro do container, se for usado como título do card */
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    display: block; /* Garante que este título seja visível */
+}
+
+
+#weather-form {
+    display: flex; /* Para colocar input e botão lado a lado */
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center; /* Centraliza os elementos do formulário */
+    align-items: center; /* Alinha verticalmente */
+}
+
+#city-input {
+    flex-grow: 1; /* Permite que o input preencha o espaço disponível */
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    outline: none; /* Remove borda de foco padrão */
+    transition: border-color 0.3s ease;
+}
+
+#city-input:focus {
+    border-color: #007bff; /* Borda azul ao focar */
+}
+
+button[type="submit"] {
+    padding: 12px 20px; /* Ajusta o padding para o botão */
+    background-color: #007bff; /* Cor azul para o botão */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3; /* Azul mais escuro no hover */
+}
+
+/* Área de resultado */
+#weather-result { /* Mudado de .result-box para #weather-result diretamente */
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0; /* Borda mais suave */
+    border-radius: 8px;
+    background-color: #fafafa;
+    min-height: 50px;
+    text-align: left;
+    display: none; /* Inicialmente oculto, aparece após a busca */
+}
+
+#weather-result.visible {
+    display: block; /* Torna visível quando tiver conteúdo */
+}
+
+
+#weather-result h2 {
+    color: #007bff;
+    margin-top: 0;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+#weather-result p {
+    margin: 5px 0;
+    font-size: 1.1em;
+}
+
+#weather-result .error {
+    color: #dc3545;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Responsividade: Ajustes para telas menores (mobile) */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 20px;
+        border-radius: 15px; /* Mantém a borda arredondada */
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    #weather-form {
+        flex-direction: column; /* Input e botão empilhados em telas pequenas */
+    }
+
+    button[type="submit"] {
+        width: 100%; /* Botão ocupa largura total */
+    }
+}
