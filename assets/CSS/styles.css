@@ -1,59 +1,60 @@
 /* Configurações básicas e reset */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #87CEEB, #ADD8E6); /* Gradiente de azul claro */
+    /* MODO DIURNO (Padrão): Gradiente azul claro */
+    background: linear-gradient(180deg, #87CEEB, #ADD8E6);
     color: #333;
     display: flex;
     justify-content: center; /* Centraliza horizontalmente */
-    align-items: center;   /* Centraliza verticalmente */
-    min-height: 100vh;     /* Garante que o body ocupe a altura total da viewport */
+    align-items: center;/* Centraliza verticalmente */
+    min-height: 100vh;/* Garante que o body ocupe a altura total da viewport */
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
+    transition: background 0.5s ease; /* Transição suave para noite/dia */
 }
 
+/* MODO NOTURNO (baseado na imagem) */
+body.night {
+    /* Fundo escuro */
+    background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
+}
+
+/* O container é o CARD BRANCO */
 .container {
     background-color: #ffffff;
     padding: 30px;
-    border-radius: 15px; /* Bordas mais arredondadas */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+    border-radius: 15px; 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
     width: 100%;
-    max-width: 400px; /* Largura um pouco menor */
+    max-width: 400px; 
     text-align: center;
+    box-sizing: border-box;
 }
 
-/* Título */
-h1 {
-    color: #333; /* Cor mais escura para o título */
-    margin-bottom: 25px;
-    font-size: 1.8em;
-    display: none; /* Oculta o título principal "Previsão do Tempo" para se adequar ao layout da imagem */
+/* Esconde o formulário quando o resultado é exibido */
+.container.result-view #weather-form,
+.container.result-view #error-message-box {
+    display: none;
 }
 
-/* Formulário e Título do Card */
-.container h1:first-of-type { /* Seleciona o primeiro h1 dentro do container, se for usado como título do card */
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    display: block; /* Garante que este título seja visível */
-}
-
+/* --- ESTILOS DO FORMULÁRIO --- */
 
 #weather-form {
-    display: flex; /* Para colocar input e botão lado a lado */
+    display: flex; 
     gap: 10px;
     margin-bottom: 20px;
-    justify-content: center; /* Centraliza os elementos do formulário */
-    align-items: center; /* Alinha verticalmente */
+    justify-content: center; 
+    align-items: center; 
 }
 
 #city-input {
-    flex-grow: 1; /* Permite que o input preencha o espaço disponível */
+    flex-grow: 1; 
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 1em;
-    outline: none; /* Remove borda de foco padrão */
+    outline: none; 
     transition: border-color 0.3s ease;
 }
 
@@ -62,8 +63,8 @@ h1 {
 }
 
 button[type="submit"] {
-    padding: 12px 20px; /* Ajusta o padding para o botão */
-    background-color: #007bff; /* Cor azul para o botão */
+    padding: 12px 20px; 
+    background-color: #007bff; 
     color: white;
     border: none;
     border-radius: 8px;
@@ -74,81 +75,103 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3; /* Azul mais escuro no hover */
+    background-color: #0056b3;
 }
 
-#weather-result {
-    /* Ocultamos o resultado quando não houver dados, como já fizemos */
-    display: none; 
-    margin-top: 0; /* Remove a margem superior que havia antes */
-    padding: 20px;
-    border: none;
-    border-radius: 15px;
-    background-color: #ffffff;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Mesma sombra do container principal */
-    min-height: auto; 
-    text-align: center;
-}
-
-#weather-result.visible {
-    display: block;
-}
-/* Estilo para a mensagem de erro, visível abaixo do formulário */
-.error-message {
-    background-color: #f8d7da; /* Fundo vermelho bem claro (suave) */
-    color: #721c24;          /* Texto vermelho escuro */
-    border: 1px solid #f5c6cb; /* Borda vermelha clara */
-    border-radius: 5px;      /* Bordas ligeiramente arredondadas */
+/* Caixa de Erro do Formulário */
+#error-message-box {
+    display: none; /* Oculta por padrão */
+    background-color: #f8d7da; 
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px; 
     padding: 10px;
-    margin-top: 15px;        /* Espaço acima para separar do formulário */
+    margin-top: -10px; /* Sobe um pouco para perto do form */
+    margin-bottom: 15px;
     font-size: 0.9em;
     text-align: center;
-    /* Faz a mensagem de erro aparecer no mesmo nível do formulário */
-    width: 100%; 
+}
+
+/* --- ESTILOS DO CARD DE RESULTADO (Conforme Imagem) --- */
+
+#weather-result {
+    display: none; /* Oculto por padrão */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* Quando o JS adicionar .visible, ele aparece */
+#weather-result.visible {
+    display: flex;
+    opacity: 1;
+}
+
+/* 1. Bloco de Temperatura (azul claro) */
+.temp-box {
+    background-color: #e8f0f8; /* Tom de azul bem claro */
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    line-height: 1;
+    display: flex; /* Para alinhar ícone e texto */
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Espaço entre o ícone e a temperatura */
+    width: 100%;
     box-sizing: border-box;
 }
 
-/* Garante que o link de tentar novamente em caso de erro no resultado final seja visível */
-.error-message a {
-    color: #721c24;
-    font-weight: bold;
-    text-decoration: underline;
+/* 1a. Ícone do Clima (DENTRO do temp-box) */
+.temp-box .weather-icon {
+    font-size: 3.5rem; /* Tamanho do ícone */
 }
 
-/* Estilo para ocultar a mensagem de erro por padrão (será mostrada pelo JS) */
-#error-message-box {
-    display: none;
-}
-/* 1. Estilização do bloco de temperatura (o retângulo cinza no topo) */
-.temp-box {
-    background-color: #e8eef3; /* Cor cinza/azul claro para o bloco */
-    color: #333;
-    padding: 15px 10px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    font-size: 3.5em; /* Fonte grande para a temperatura */
-    font-weight: bold;
-    line-height: 1;
+/* 1b. Texto da Temperatura (DENTRO do temp-box) */
+.temp-box span {
+    font-size: 3.5rem; /* Tamanho da temperatura */
 }
 
-/* 2. Estilização do nome da cidade */
+/* 2. Nome da Cidade */
 .city-name {
-    font-size: 1.2em;
+    font-size: 1.5rem; /* 24px */
+    font-weight: 500; /* Mais peso, como na imagem */
     color: #333;
-    margin-bottom: 20px;
-    font-weight: 500;
+    margin-bottom: 8px;
 }
 
-/* 3. Estilização do ícone da casa (simplesmente centralizado) */
+/* 3. Descrição do Clima */
+.description {
+    font-size: 1.1rem; /* 18px */
+    font-weight: 400;
+    color: #555; /* Cinza escuro, não preto */
+    text-transform: capitalize;
+    margin-bottom: 8px;
+}
+
+/* 4. Data da Consulta */
+.date {
+    font-size: 0.9rem; /* 14px */
+    font-weight: 300;
+    color: #777; /* Cinza mais claro */
+    margin-bottom: 20px; /* Espaço antes do ícone home */
+}
+
+/* 5. Ícone da Casa (círculo azul) */
 .home-icon {
     display: inline-block;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
+    width: 45px;
+    height: 45px;
+    line-height: 45px; /* Alinha o ícone 🏠 verticalmente */
     background-color: #007bff;
     color: white;
     border-radius: 50%; /* Faz um círculo */
-    font-size: 1.2em;
+    font-size: 1.5rem; /* Tamanho do ícone 🏠 */
     text-align: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -158,7 +181,57 @@ button[type="submit"]:hover {
 .home-icon:hover {
     background-color: #0056b3;
 }
-/* Responsividade: Ajustes para telas menores (mobile) */
+
+/* --- ESTILOS DO FUSO HORÁRIO --- */
+.local-time {
+    font-size: 0.9rem; /* 14px */
+    font-weight: 300;
+    color: #777; /* Cinza mais claro */
+    margin-bottom: 20px; /* Espaço antes do ícone home */
+}
+
+/* --- EFEITOS DE FUNDO (Clima) --- */
+/* O 'transition' no 'body' que já temos fará a troca ser suave */
+
+/* DIA - Nublado */
+body.bg-cloudy {
+    background: linear-gradient(180deg, #b0c4de, #c0c0c0); /* Azul-acinzentado para Cinza */
+}
+/* NOITE - Nublado */
+body.night.bg-cloudy {
+    background: linear-gradient(180deg, #3a4a5e, #2e3b48); /* Azul-noite mais acinzentado */
+}
+
+
+/* DIA - Chuva */
+body.bg-rain {
+    background: linear-gradient(180deg, #708090, #778899); /* Cinza-ardósia */
+}
+/* NOITE - Chuva */
+body.night.bg-rain {
+    background: linear-gradient(180deg, #2d3p, #1e2833); /* Cinza-noite bem escuro */
+}
+
+
+/* DIA - Tempestade */
+body.bg-thunder {
+    background: linear-gradient(180deg, #483d8b, #2f2f4f); /* Azul-escuro para roxo */
+}
+/* NOITE - Tempestade */
+body.night.bg-thunder {
+    background: linear-gradient(180deg, #2a2450, #1a1a2e); /* Roxo-noite */
+}
+
+/* DIA - Neve */
+body.bg-snow {
+    background: linear-gradient(180deg, #e6e6fa, #f0f8ff); /* Lavanda para Alice-blue */
+}
+/* NOITE - Neve */
+body.night.bg-snow {
+    background: linear-gradient(180deg, #3b4c64, #2c3a4f); /* Noite azulada escura */
+}
+
+/* Responsividade */
 @media (max-width: 600px) {
     body {
         padding: 10px;
@@ -166,18 +239,24 @@ button[type="submit"]:hover {
     
     .container {
         padding: 20px;
-        border-radius: 15px; /* Mantém a borda arredondada */
-    }
-
-    h1 {
-        font-size: 1.5em;
     }
 
     #weather-form {
-        flex-direction: column; /* Input e botão empilhados em telas pequenas */
+        flex-direction: column; /* Input e botão empilhados */
+    }
+    
+    #city-input, button[type="submit"] {
+        width: 100%;
+        box-sizing: border-box; /* Garante que o padding não quebre o layout */
     }
 
-    button[type="submit"] {
-        width: 100%; /* Botão ocupa largura total */
+    .temp-box {
+        flex-direction: column; /* Empilha ícone e temp em telas pequenas */
+        gap: 5px;
+    }
+
+    .temp-box .weather-icon,
+    .temp-box span {
+        font-size: 3rem; /* Reduz um pouco em telas pequenas */
     }
 }

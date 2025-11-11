@@ -5,24 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Previsão do Tempo ☀️</title>
-    <link rel="stylesheet" href="assets/CSS/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body>
     <div class="container">
         <h1>Previsão do Tempo</h1>
         <form id="weather-form">
-            <input type="text" id="city-input" placeholder="Digite o nome da cidade" required>
+
+            <input type="text" id="city-input" placeholder="Digite o nome da cidade...">
             <button type="submit">Buscar</button>
         </form>
-        <div id="error-message-box" class="error-message">
-        </div>
 
-        <div id="weather-result" class="result-box">
+        <div id="error-message-box" style="display: none;"></div>
+
+        <div id="weather-result">
             <p>Aguardando busca...</p>
         </div>
-    </div>
 
+    </div>
     <script src="assets/JS/api.js"></script>
 </body>
 
