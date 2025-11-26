@@ -1,183 +1,270 @@
-/* Configurações básicas e reset */
+/* --- CONFIGURAÇÕES GLOBAIS E FONTES --- */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #87CEEB, #ADD8E6); /* Gradiente de azul claro */
-    color: #333;
     display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center;   /* Centraliza verticalmente */
-    min-height: 100vh;     /* Garante que o body ocupe a altura total da viewport */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
+    transition: background 0.8s ease-in-out;
+    overflow: hidden; /* Previne barras de rolagem das animações */
+    
+    /* FUNDO PADRÃO (Dia, Céu Limpo) */
+    background: linear-gradient(180deg, #87CEEB, #ADD8E6);
+    color: #333;
 }
 
+/* --- FUNDOS DINÂMICOS (DIA/NOITE) --- */
+body.night {
+    background: linear-gradient(180deg, #0f2027, #203a43); /* Noite (como na foto) */
+}
+body.is-cloudy {
+    background: linear-gradient(180deg, #b0c4de, #c0c0c0); /* Dia Nublado */
+}
+body.night.is-cloudy {
+    background: linear-gradient(180deg, #3a4a5e, #2e3b48); /* Noite Nublada */
+}
+body.is-thunder {
+    background: linear-gradient(180deg, #483d8b, #2f2f4f); /* Tempestade */
+}
+
+/* --- ANIMAÇÕES DE FUNDO (CHUVA/NEVE) --- */
+/*
+   Usamos pseudo-elementos ::before e ::after para criar as animações
+   sem precisar de mais HTML.
+*/
+/* --- ANIMAÇÕES DE FUNDO (CHUVA/NEVE) --- */
+
+/* ANIMAÇÃO DE CHUVA (Corrigida para "pingos") */
+body.is-raining::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* Cria "traços" de chuva: transparentes em cima, brancos em baixo */
+    background-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 100%
+    );
+    
+    /* Define o tamanho de cada "pingo": 1px de largura, 15px de altura */
+    background-size: 1px 15px;
+    
+    /* Anima a posição do fundo */
+    animation: rain-fall 0.3s linear infinite;
+    z-index: -1;
+}
+/* ANIMAÇÃO DE NEVE */
+body.is-snowing::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+    background-size: 25px 25px; /* Flocos de neve */
+    animation: snow-fall 4s linear infinite;
+    z-index: -1;
+}
+
+/* Keyframes (motor da animação) */
+@keyframes rain-fall {
+    from { transform: translateY(0); }
+    to { transform: translateY(200vh); } /* 200vh para garantir que cruze a tela */
+}
+
+@keyframes snow-fall {
+    from { background-position: 0 0; }
+    to { background-position: 50px 100vh; }
+}
+
+
+/* --- CARD PRINCIPAL --- */
 .container {
     background-color: #ffffff;
     padding: 30px;
-    border-radius: 15px; /* Bordas mais arredondadas */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     width: 100%;
-    max-width: 400px; /* Largura um pouco menor */
+    max-width: 400px;
     text-align: center;
+    box-sizing: border-box;
 }
 
-/* Título */
+/* --- TELA DE FORMULÁRIO (INICIAL) --- */
 h1 {
-    color: #333; /* Cor mais escura para o título */
+    color: #333;
     margin-bottom: 25px;
     font-size: 1.8em;
-    display: none; /* Oculta o título principal "Previsão do Tempo" para se adequar ao layout da imagem */
 }
-
-/* Formulário e Título do Card */
-.container h1:first-of-type { /* Seleciona o primeiro h1 dentro do container, se for usado como título do card */
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    display: block; /* Garante que este título seja visível */
-}
-
 
 #weather-form {
-    display: flex; /* Para colocar input e botão lado a lado */
+    display: flex;
     gap: 10px;
     margin-bottom: 20px;
-    justify-content: center; /* Centraliza os elementos do formulário */
-    align-items: center; /* Alinha verticalmente */
 }
 
 #city-input {
-    flex-grow: 1; /* Permite que o input preencha o espaço disponível */
+    flex-grow: 1;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 1em;
-    outline: none; /* Remove borda de foco padrão */
-    transition: border-color 0.3s ease;
-}
-
-#city-input:focus {
-    border-color: #007bff; /* Borda azul ao focar */
+    outline: none;
 }
 
 button[type="submit"] {
-    padding: 12px 20px; /* Ajusta o padding para o botão */
-    background-color: #007bff; /* Cor azul para o botão */
+    padding: 12px 20px;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1em;
     font-weight: bold;
-    transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover {
-    background-color: #0056b3; /* Azul mais escuro no hover */
-}
-
-#weather-result {
-    /* Ocultamos o resultado quando não houver dados, como já fizemos */
-    display: none; 
-    margin-top: 0; /* Remove a margem superior que havia antes */
-    padding: 20px;
-    border: none;
-    border-radius: 15px;
-    background-color: #ffffff;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Mesma sombra do container principal */
-    min-height: auto; 
-    text-align: center;
-}
-
-#weather-result.visible {
-    display: block;
-}
-/* Estilo para a mensagem de erro, visível abaixo do formulário */
+/* Caixa de Erro */
 .error-message {
-    background-color: #f8d7da; /* Fundo vermelho bem claro (suave) */
-    color: #721c24;          /* Texto vermelho escuro */
-    border: 1px solid #f5c6cb; /* Borda vermelha clara */
-    border-radius: 5px;      /* Bordas ligeiramente arredondadas */
+    display: none; /* Oculta por padrão */
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
     padding: 10px;
-    margin-top: 15px;        /* Espaço acima para separar do formulário */
+    margin-top: -10px;
+    margin-bottom: 15px;
     font-size: 0.9em;
-    text-align: center;
-    /* Faz a mensagem de erro aparecer no mesmo nível do formulário */
-    width: 100%; 
+}
+
+/* --- TELA DE RESULTADO (LAYOUT DA FOTO) --- */
+
+/* Esconde o resultado por padrão */
+#weather-result {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* Mostra o resultado e esconde o formulário quando a classe .result-view é add */
+body.result-view .container {
+    /* Oculta o título H1 e o formulário */
+    & h1, & #weather-form, & #error-message-box {
+        display: none;
+    }
+    
+    /* Mostra o card de resultado */
+    & #weather-result {
+        display: flex;
+        opacity: 1;
+    }
+}
+
+/* 1. Bloco de Temperatura (azul claro) */
+.temp-box {
+    background-color: #e8f0f8; /* Tom de azul bem claro (da foto) */
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
     box-sizing: border-box;
 }
 
-/* Garante que o link de tentar novamente em caso de erro no resultado final seja visível */
-.error-message a {
-    color: #721c24;
-    font-weight: bold;
-    text-decoration: underline;
+.temp-box .weather-icon {
+    font-size: 3.5rem; /* Ícone do clima */
 }
-
-/* Estilo para ocultar a mensagem de erro por padrão (será mostrada pelo JS) */
-#error-message-box {
-    display: none;
-}
-/* 1. Estilização do bloco de temperatura (o retângulo cinza no topo) */
-.temp-box {
-    background-color: #e8eef3; /* Cor cinza/azul claro para o bloco */
-    color: #333;
-    padding: 15px 10px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    font-size: 3.5em; /* Fonte grande para a temperatura */
-    font-weight: bold;
-    line-height: 1;
-}
-
-/* 2. Estilização do nome da cidade */
-.city-name {
-    font-size: 1.2em;
-    color: #333;
-    margin-bottom: 20px;
+.temp-box span {
+    font-size: 3.5rem; /* Texto da temperatura */
     font-weight: 500;
 }
 
-/* 3. Estilização do ícone da casa (simplesmente centralizado) */
+/* 2. Nome da Cidade */
+.city-name {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* 3. Descrição do Clima */
+.description {
+    font-size: 1.1rem; /* 18px */
+    color: #555;
+    text-transform: capitalize;
+    margin-bottom: 8px;
+}
+
+/* 4. Data */
+.date {
+    font-size: 0.9rem; /* 14px */
+    color: #777;
+}
+
+/* 5. Horário Local (Novo) */
+.local-time {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #777;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+/* 6. Ícone "Home" (círculo azul) */
 .home-icon {
     display: inline-block;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
     background-color: #007bff;
     color: white;
-    border-radius: 50%; /* Faz um círculo */
-    font-size: 1.2em;
+    border-radius: 50%;
+    font-size: 1.5rem;
     text-align: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s;
 }
-
 .home-icon:hover {
     background-color: #0056b3;
 }
-/* Responsividade: Ajustes para telas menores (mobile) */
+
+
+/* --- RESPONSIVIDADE --- */
 @media (max-width: 600px) {
     body {
         padding: 10px;
     }
-    
     .container {
         padding: 20px;
-        border-radius: 15px; /* Mantém a borda arredondada */
     }
-
-    h1 {
-        font-size: 1.5em;
-    }
-
     #weather-form {
-        flex-direction: column; /* Input e botão empilhados em telas pequenas */
+        flex-direction: column;
     }
-
-    button[type="submit"] {
-        width: 100%; /* Botão ocupa largura total */
+    #city-input, button[type="submit"] {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .temp-box {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .temp-box .weather-icon,
+    .temp-box span {
+        font-size: 3rem;
     }
 }
