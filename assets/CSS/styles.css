@@ -226,19 +226,22 @@ body.result-view .container {
 
 /* 6. Ícone "Home" (círculo azul) */
 .home-icon {
-    display: inline-block;
-    width: 45px;
-    height: 45px;
-    line-height: 45px;
-    background-color: #007bff;
+    display: flex;            /* ativa flexbox */
+    align-items: center;      /* centraliza na vertical */
+    justify-content: center;  /* centraliza na horizontal */
+    margin-top: 20px;
+    width: 70px;
+    height: 70px;
+
+    background-color: #57a4f6;
     color: white;
     border-radius: 50%;
     font-size: 1.5rem;
-    text-align: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s;
 }
+
 .home-icon:hover {
     background-color: #0056b3;
 }
@@ -266,5 +269,108 @@ body.result-view .container {
     .temp-box .weather-icon,
     .temp-box span {
         font-size: 3rem;
+        margin-top: 2px;
+    }
+}
+
+/* 7. Bloco de Máxima e Mínima */
+.temp-min-max {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.temp-detail {
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.temp-detail .label {
+    display: block;
+    font-size: 0.7em;
+    color: #333;
+    margin-bottom: 2px;
+}
+.temp-detail .value {
+    font-size: 1.2em;
+    color: #333;
+}
+
+/* Cores específicas da imagem */
+.temp-max {
+    background-color: #ffe89e; /* Amarelo da Máxima */
+}
+.temp-min {
+    background-color: #e5f4ff; /* Azul da Mínima */
+}
+
+
+/* GRID dos cards */
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    margin-top: 20px;
+    width: 100%;
+}
+
+
+/* Cada card */
+.variable-card {
+    background: rgba(90, 184, 203, 0.15);
+    padding: 15px;
+    border-radius: 14px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform .2s ease;
+}
+
+/* Efeito no hover */
+.variable-card:hover {
+    transform: translateY(-3px);
+}
+
+/* Ícones */
+.variable-card i {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: #3722bf;
+    display: block;
+}
+
+/* Valor */
+.variable-card .value {
+    display: block;
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+/* Label */
+.variable-card .label {
+    display: block;
+    font-size: 13px;
+    opacity: 0.8;
+    margin-top: 3px;
+}
+
+/* Adaptação de Responsividade para as novas variáveis */
+@media (max-width: 600px) {
+    /* ... (Mantenha estilos existentes) ... */
+    
+    .additional-variables {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .variable-item {
+        width: 30%;
+        margin-bottom: 15px;
     }
 }
