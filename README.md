@@ -6,10 +6,22 @@ Uma aplicação web simples, limpa e responsiva para exibir a previsão do tempo
 
 A estrutura do projeto está organizada de forma modular, separando a lógica (JavaScript), os estilos (CSS) e os arquivos de configuração.
 
-/PROJETO_CLIMA |-- /assets | |-- /css | | |-- styles.css (Estilos principais) | |-- /js | | |-- api.js (Lógica principal, API e DOM) | |-- /tests | | |-- api.test.js (Opcional: Arquivos de Teste) |-- .gitignore |-- index.html (Página principal) |-- README.md |-- https://www.google.com/search?q=LICENSE |-- https://www.google.com/search?q=NOTICE.md |-- package.json |-- package-lock.json
-
-
----
+```bash
+/PROJETO_CLIMA 
+|-- /assets 
+|   |-- /css 
+|   |   |-- styles.css (Estilos principais) 
+|   |-- /js 
+|   |   |-- api.js (Lógica principal, API e DOM) 
+|   |-- /tests 
+|   |   |-- api.test.js (Opcional: Arquivos de Teste) 
+|-- .gitignore 
+|-- index.html (Página principal) 
+|-- README.md 
+|-- LICENSE 
+|-- NOTICE.md 
+|-- package.json 
+|-- package-lock.json
 
 ## 🚀 **Funcionalidades Principais**
 
@@ -52,12 +64,15 @@ O projeto roda inteiramente no navegador, sem a necessidade de um servidor backe
 
 1. **Clone o repositório:**
 ```sh
-git clone [https://github.com/jmcardoso18/](https://github.com/jmcardoso18/)<nome-do-projeto>.git
+git clone [https://github.com/jmcardoso18/](https://github.com/jmcardoso18/projeto_clima)
+````
 Acesse o diretório:
 
+````
 Bash
 
-cd nome-do-projeto
+cd projeto_clima
+
 Abra o arquivo: Abra o arquivo index.html no seu navegador de preferência.
 
 ▶️ Execução
@@ -65,21 +80,26 @@ Abra o arquivo: Abra o arquivo index.html no seu navegador de preferência.
 Basta abrir o arquivo index.html.
 
 Ou utilizar uma extensão de IDE, como o Live Server (VSCode), para facilitar o desenvolvimento.
-
+````
 🧪 Testes
 
 Opcional dependendo da etapa, incluir testes simulados ou unitários de funções JS.
 
 Exemplo:
-
+````
 Bash
 
 npm test
+````
+
 🔐 Segurança e Privacidade
 
 Esta aplicação:
 
-❌ Não coleta dados pessoais ❌ Não armazena localização real do usuário 🔒 Utiliza apenas dados públicos da API Open-Meteo
+* ❌ Não coleta dados pessoais 
+* ❌ Não armazena localização real do usuário 
+* 🔒 Utiliza apenas dados públicos da API Open-Meteo
+
 
 ⚠️ Aviso de Privacidade: A aplicação pode enviar informações da cidade consultada para a API Open-Meteo, exclusivamente para obter dados climáticos. Nenhuma informação é armazenada nos servidores do desenvolvedor.
 
