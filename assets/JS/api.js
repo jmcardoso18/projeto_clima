@@ -159,7 +159,7 @@ function displayWeather(cityName, data) {
     // Pega a umidade da hora atual. O Open-Meteo não tem umidade em 'current', usa 'hourly'.
     // A hora atual é o índice 0 na lista de dados horários.
     const currentHourIndex = data.hourly.time.findIndex(t => t === time);
-    const humidity = data.hourly.relative_humidity_2m[currentHourIndex];
+    const humidity = data.hourly.relative_humidity_2m[0];
 
     // Precipitação acumulada nas últimas 24h ou apenas a atual. 
     // Para simplificar, usamos a precipitação do dia todo (diária).
@@ -169,7 +169,7 @@ function displayWeather(cityName, data) {
     const description = getWeatherDescription(weather_code);
     const iconClass = getWeatherIconClass(weather_code, is_day);
     const formattedDate = formatFullDate(time);
-    const dateOnly = formattedDate.split(',')[0]; // Ex: domingo, 2 de novembro de 2025
+    const dateOnly = formattedDate; // Ex: domingo, 2 de novembro de 2025
 
     // Aplica classes de fundo dinâmicas
     bodyElement.classList.remove(...BACKGROUND_CLASSES);
@@ -178,7 +178,6 @@ function displayWeather(cityName, data) {
 
     // 2. Injeção do novo HTML
     weatherResult.innerHTML = `
-        <h1>Previsão do Tempo ☀️</h1>
         <div class="temp-box">
             
             <i class="weather-icon ${iconClass}"></i>
@@ -229,8 +228,7 @@ function displayWeather(cityName, data) {
 //  API
 // =============================
 async function getCoordinates(cityName) {
-    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1&language=pt&format=json`;
-
+   const url = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1&language=pt&format=json`;
     try {
         const response = await fetch(url);
         if (!response.ok) throw new Error();

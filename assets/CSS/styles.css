@@ -1,376 +1,392 @@
-/* --- CONFIGURAÇÕES GLOBAIS E FONTES --- */
+/* ===========================================================
+   🔵 VARIÁVEIS DO TEMA
+   =========================================================== */
+:root {
+    /* Paleta Azul / Clima */
+    --blue-50:  #e6f4ff;
+    --blue-100: #bae2ff;
+    --blue-200: #8ad0ff;
+    --blue-300: #57bbff;
+    --blue-400: #2aa7ff;
+    --blue-500: #0091ff;
+    --blue-600: #0074cc;
+    --blue-700: #005999;
+    --blue-800: #003d66;
+    --blue-900: #002233;
+
+    --gray-100: #f5f5f5;
+    --gray-200: #e8e8e8;
+    --gray-400: #505861;
+    --black-800: #171717;
+    --white: #ffffff;
+
+    /* Sombras */
+    --shadow-sm: 0 0.25rem 0.5rem #0000000D;
+    --shadow-md: 0 0.25rem 0.75rem #0091ff4d;
+    --shadow-lg: 0 0.5rem 1.5rem #0091ff33;
+
+    --radius: 1rem;
+}
+
+/* ===========================================================
+   🔵 RESET
+   =========================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(to bottom, var(--blue-200), var(--blue-900));
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===========================================================
+   🔵 HEADER
+   =========================================================== */
+header {
+    background: #ffffff99;
+    padding: 1rem;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header h1 {
+    color: var(--blue-900);
+}
+
+/* ===========================================================
+   🔵 FORMULÁRIO
+   =========================================================== */
+#weather-form {
+    margin: 2.5rem auto 1.5rem auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
-    transition: background 0.8s ease-in-out;
-    overflow: hidden; /* Previne barras de rolagem das animações */
-    
-    /* FUNDO PADRÃO (Dia, Céu Limpo) */
-    background: linear-gradient(180deg, #87CEEB, #ADD8E6);
-    color: #333;
-}
-
-/* --- FUNDOS DINÂMICOS (DIA/NOITE) --- */
-body.night {
-    background: linear-gradient(180deg, #0f2027, #203a43); /* Noite (como na foto) */
-}
-body.is-cloudy {
-    background: linear-gradient(180deg, #b0c4de, #c0c0c0); /* Dia Nublado */
-}
-body.night.is-cloudy {
-    background: linear-gradient(180deg, #3a4a5e, #2e3b48); /* Noite Nublada */
-}
-body.is-thunder {
-    background: linear-gradient(180deg, #483d8b, #2f2f4f); /* Tempestade */
-}
-
-/* --- ANIMAÇÕES DE FUNDO (CHUVA/NEVE) --- */
-/*
-   Usamos pseudo-elementos ::before e ::after para criar as animações
-   sem precisar de mais HTML.
-*/
-/* --- ANIMAÇÕES DE FUNDO (CHUVA/NEVE) --- */
-
-/* ANIMAÇÃO DE CHUVA (Corrigida para "pingos") */
-body.is-raining::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
+    gap: 1rem;
     width: 100%;
-    height: 100%;
-    
-    /* Cria "traços" de chuva: transparentes em cima, brancos em baixo */
-    background-image: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(255, 255, 255, 0.3) 100%
-    );
-    
-    /* Define o tamanho de cada "pingo": 1px de largura, 15px de altura */
-    background-size: 1px 15px;
-    
-    /* Anima a posição do fundo */
-    animation: rain-fall 0.3s linear infinite;
-    z-index: -1;
-}
-/* ANIMAÇÃO DE NEVE */
-body.is-snowing::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
-    background-size: 25px 25px; /* Flocos de neve */
-    animation: snow-fall 4s linear infinite;
-    z-index: -1;
-}
-
-/* Keyframes (motor da animação) */
-@keyframes rain-fall {
-    from { transform: translateY(0); }
-    to { transform: translateY(200vh); } /* 200vh para garantir que cruze a tela */
-}
-
-@keyframes snow-fall {
-    from { background-position: 0 0; }
-    to { background-position: 50px 100vh; }
-}
-
-
-/* --- CARD PRINCIPAL --- */
-.container {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-/* --- TELA DE FORMULÁRIO (INICIAL) --- */
-h1 {
-    color: #333;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-}
-
-#weather-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    max-width: 480px;
 }
 
 #city-input {
-    flex-grow: 1;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1em;
-    outline: none;
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
 }
 
-button[type="submit"] {
-    padding: 12px 20px;
-    background-color: #007bff;
-    color: white;
+#weather-form button {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
     border: none;
-    border-radius: 8px;
+    background: var(--blue-600);
+    color: var(--white);
     cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+    transition: 0.2s;
 }
 
-/* Caixa de Erro */
+#weather-form button:hover {
+    background: var(--blue-700);
+}
+
+/* ===========================================================
+   🔵 CONTAINER PRINCIPAL (CARD DO CLIMA)
+   =========================================================== */
+.container {
+    background: var(--white);
+    width: 90%;
+    max-width: 480px;
+    margin: 0 auto 3rem auto;
+    padding: 2rem;
+    border-radius: 1.2rem;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+}
+
+/* ===========================================================
+   🔵 MENSAGEM DE ERRO
+   =========================================================== */
 .error-message {
-    display: none; /* Oculta por padrão */
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: -10px;
-    margin-bottom: 15px;
-    font-size: 0.9em;
-}
-
-/* --- TELA DE RESULTADO (LAYOUT DA FOTO) --- */
-
-/* Esconde o resultado por padrão */
-#weather-result {
     display: none;
-    flex-direction: column;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+    margin: 1rem auto;
+    color: #ff3333;
+    font-weight: 600;
 }
 
-/* Mostra o resultado e esconde o formulário quando a classe .result-view é add */
-body.result-view .container {
-    /* Oculta o título H1 e o formulário */
-    & h1, & #weather-form, & #error-message-box {
-        display: none;
-    }
-    
-    /* Mostra o card de resultado */
-    & #weather-result {
-        display: flex;
-        opacity: 1;
-    }
-}
-
-/* 1. Bloco de Temperatura (azul claro) */
+/* ===========================================================
+   🔵 BLOCO TEMPERATURA / ÍCONE
+   =========================================================== */
 .temp-box {
-    background-color: #e8f0f8; /* Tom de azul bem claro (da foto) */
-    color: #333;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    width: 100%;
-    box-sizing: border-box;
+    background: var(--blue-50);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
 }
 
-.temp-box .weather-icon {
-    font-size: 3.5rem; /* Ícone do clima */
-}
-.temp-box span {
-    font-size: 3.5rem; /* Texto da temperatura */
-    font-weight: 500;
+.weather-icon {
+    font-size: 3rem;
 }
 
-/* 2. Nome da Cidade */
+.temp {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--blue-800);
+}
+
+/* ===========================================================
+   🔵 INFORMAÇÕES PRINCIPAIS
+   =========================================================== */
 .city-name {
-    font-size: 1.5rem; /* 24px */
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 8px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 1rem;
 }
 
-/* 3. Descrição do Clima */
 .description {
-    font-size: 1.1rem; /* 18px */
-    color: #555;
-    text-transform: capitalize;
-    margin-bottom: 8px;
+    color: var(--gray-400);
+    margin-top: 0.25rem;
 }
 
-/* 4. Data */
 .date {
-    font-size: 0.9rem; /* 14px */
-    color: #777;
-}
-
-/* 5. Horário Local (Novo) */
-.local-time {
+    margin-top: 0.25rem;
+    color: var(--blue-700);
     font-size: 0.9rem;
-    font-weight: 500;
-    color: #777;
-    margin-top: 5px;
-    margin-bottom: 20px;
 }
 
-/* 6. Ícone "Home" (círculo azul) */
-.home-icon {
-    display: flex;            /* ativa flexbox */
-    align-items: center;      /* centraliza na vertical */
-    justify-content: center;  /* centraliza na horizontal */
-    margin-top: 20px;
-    width: 70px;
-    height: 70px;
-
-    background-color: #57a4f6;
-    color: white;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
-}
-
-.home-icon:hover {
-    background-color: #0056b3;
-}
-
-
-/* --- RESPONSIVIDADE --- */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-    .container {
-        padding: 20px;
-    }
-    #weather-form {
-        flex-direction: column;
-    }
-    #city-input, button[type="submit"] {
-        width: 100%;
-        box-sizing: border-box;
-    }
-    .temp-box {
-        flex-direction: column;
-        gap: 5px;
-    }
-    .temp-box .weather-icon,
-    .temp-box span {
-        font-size: 3rem;
-        margin-top: 2px;
-    }
-}
-
-/* 7. Bloco de Máxima e Mínima */
+/* ===========================================================
+   🔵 MÁXIMA / MÍNIMA
+   =========================================================== */
 .temp-min-max {
-    margin-top: 25px;
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 25px;
+    gap: 1rem;
+    margin: 1rem 0;
 }
 
 .temp-detail {
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-size: 0.9em;
-    font-weight: bold;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: var(--blue-50);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
 }
 
-.temp-detail .label {
+.temp-detail span {
     display: block;
-    font-size: 0.7em;
-    color: #333;
-    margin-bottom: 2px;
-}
-.temp-detail .value {
-    font-size: 1.2em;
-    color: #333;
+    font-weight: 600;
 }
 
-/* Cores específicas da imagem */
-.temp-max {
-    background-color: #ffe89e; /* Amarelo da Máxima */
-}
-.temp-min {
-    background-color: #e5f4ff; /* Azul da Mínima */
-}
-
-
-/* GRID dos cards */
+/* ===========================================================
+   🔵 GRID DOS CARDS DE VARIÁVEIS
+   =========================================================== */
 .grid-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-    margin-top: 20px;
-    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+    align-items: stretch;
 }
 
-
-/* Cada card */
 .variable-card {
-    background: rgba(90, 184, 203, 0.15);
-    padding: 15px;
-    border-radius: 14px;
-    text-align: center;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform .2s ease;
+    background: var(--blue-50);
+    padding: 1rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-/* Efeito no hover */
-.variable-card:hover {
-    transform: translateY(-3px);
-}
-
-/* Ícones */
-.variable-card i {
-    font-size: 32px;
-    margin-bottom: 8px;
-    color: #3722bf;
-    display: block;
-}
-
-/* Valor */
 .variable-card .value {
-    display: block;
-    font-size: 22px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* ===========================================================
+   🔵 BOTÃO VOLTAR
+   =========================================================== */
+.home-icon {
+    margin-top: 2rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius);
+    background: var(--blue-600);
+    border: none;
+    color: var(--white);
     font-weight: 600;
-    margin-top: 5px;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
 }
 
-/* Label */
-.variable-card .label {
+.home-icon:hover {
+    background: var(--blue-700);
+}
+
+/* ===========================================================
+   🌙 DINÂMICA: CLASSES DE FUNDO DO CLIMA
+   (Aplicadas automaticamente pelo JavaScript)
+   =========================================================== */
+
+body.night {
+    background: linear-gradient(#0b1b33, #000814);
+}
+
+body.is-clear {
+    background: linear-gradient(#87CEEB, #fefefe);
+}
+
+body.is-cloudy {
+    background: linear-gradient(#9bb3c9, #6b7c93);
+}
+
+body.is-raining {
+    background: linear-gradient(#4a6fa5, #1e3a66);
+}
+
+body.is-snowing {
+    background: linear-gradient(#dbeafe, #cbd5e1);
+}
+
+body.is-thunder {
+    background: linear-gradient(#2c3e50, #000);
+}
+
+/* ===========================================================
+   🔵 FOOTER
+   =========================================================== */
+footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 1.5rem 0;
+    background: #ffffff55;
+    backdrop-filter: blur(6px);
+    /* Garante que o conteúdo do footer esteja centrado verticalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+}
+
+.footer-attribution {
+    font-size: 0.75rem; /* Fonte menor para a atribuição */
+    color: var(--black-800); /* Cor discreta */
+    padding-bottom: 0.5rem;
+}
+
+.footer-attribution a {
+    color: var(--blue-700);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-attribution a:hover {
+    text-decoration: underline;
+}
+
+.privacy-icon {
+    display: inline-block;
+    margin-right: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.license-text, .privacy-text {
+    margin: 0.2rem 0;
+}
+
+/* ===========================================================
+   🔵 RESPONSIVIDADE
+   =========================================================== */
+@media (max-width: 480px) {
+    #weather-form {
+        flex-direction: column;
+    }
+
+    .grid-cards {
+        grid-template-columns: 1fr;
+    }
+}
+/* ===========================================================
+   🔵 TROCA DE TELA (FORM -> RESULTADOS)
+   =========================================================== */
+
+body.result-view #weather-form,
+body.result-view #error-message-box {
+    display: none;
+}
+
+body.result-view #weather-result {
     display: block;
-    font-size: 13px;
-    opacity: 0.8;
-    margin-top: 3px;
+    margin-top: 2rem;
 }
 
-/* Adaptação de Responsividade para as novas variáveis */
-@media (max-width: 600px) {
-    /* ... (Mantenha estilos existentes) ... */
-    
-    .additional-variables {
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-    .variable-item {
-        width: 30%;
-        margin-bottom: 15px;
-    }
+#weather-result {
+    display: none;
 }
+
+/* ===========================================================
+   🔵 Ajustes visuais da tela de resultados
+   =========================================================== */
+
+.weather-main-icon {
+    font-size: 48px;       /* antes ~80px+ */
+    margin-bottom: 0.5rem;
+}
+
+.weather-temp {
+    font-size: 32px;       /* antes muito grande */
+}
+
+.weather-range {
+    font-size: 18px;
+    margin-top: 0.5rem;
+}
+
+.weather-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.weather-card {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #ffffffcc;
+    backdrop-filter: blur(4px);
+    text-align: center;
+}
+
+/* Botão voltar menor e mais elegante */
+.home-icon {
+    font-size: 28px; /* antes muito grande */
+    padding: 8px 12px;
+    border-radius: 8px;
+    top: 10px;
+    left: 10px;
+}
+
+/* Caixa principal mais compacta */
+#weather-result {
+/* Centralização: Define largura máxima e usa margem automática */
+max-width: 600px;
+margin: 2rem auto 3rem auto; /* Adicionei margin auto para centralizar horizontalmente */
+padding: 1.2rem;
+border-radius: 16px;
+background: var(--white); /* Adicione o fundo branco aqui, já que não usa mais .container */
+box-shadow: var(--shadow-lg); /* Adicione a sombra aqui */
+text-align: center; /* Centraliza o texto interno */
+display: none; /* Mantém o padrão de não exibir */
+}
+

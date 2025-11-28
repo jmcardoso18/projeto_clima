@@ -1,22 +1,58 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Previsão do Tempo ☀️</title>
+    <link rel="icon" 
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>☀️</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
-    <link rel="stylesheet" href="assets/CSS/styles.css">
+      <!-- Link para o arquivo CSS-->
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <title>Previsão do Tempo </title>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Previsão do Tempo ☀️</h1>
-        <form id="weather-form">
-            <input type="text" id="city-input" placeholder="Digite o nome da cidade" required>
-            <button type="submit">Buscar</button>
-        </form>
-        <div id="error-message-box" class="error-message"></div>
-        <div id="weather-result"></div>
+    <!--Cabeçalho-->
+    <header class="flex cabecalho_container">
+        <article class="cabecalho_content">
+            <h1 class="cabecalho">☀️ Previsão do Tempo ☀️ </h1>
+        </article>
+    </header>
+
+    <!--Área Principal do Site-->
+    <main>
+
+        <section id="previsao" class="previsao_container">
+
+            <div class="previsao_content">
+            
+            <form id="weather-form">
+                <input type="text" id="city-input" placeholder="Digite o nome da cidade" required>
+                <button type="submit">Buscar</button>
+            </form>
+            <div id="error-message-box" class="error-message"></div>
+            <div id="weather-result"></div>
+        </div>
+        </section>
+
+    </main>
+
+    <!--Rodapé-->
+    <footer>
+       <div class="footer-attribution">
+        
+        <p class="privacy-text"><span class="privacy-icon">🔒</span>Esta aplicação não coleta, armazena ou compartilha dados pessoais. As buscas são processadas em tempo real e não são registradas.</p>
+        
+        <p class="license-text">
+            Dados meteorológicos fornecidos por 
+            <a href="https://www.open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo.com</a> 
+            sob licença 
+            <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>
+        </p>
     </div>
-    <script src="assets/JS/api.js"></script>
+    </footer>
+    <!-- Link para o arquivo JavaScript-->
+    <script src="./assets/js/api.js"></script>
 </body>
 </html>
